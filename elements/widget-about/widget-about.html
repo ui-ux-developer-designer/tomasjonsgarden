@@ -1,0 +1,59 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="widget-about">
+
+	<template>
+		<iron-ajax url="https://vimeo.com/api/v2/4487625/info.json" last-response="{{data}}" auto></iron-ajax>
+		<style>
+			:host {
+				/*display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;*/
+				display: block;
+				-webkit-column-width: 495px;
+				padding: 8px;
+				box-sizing: border-box;
+				border-top: 1px solid;
+				/*border-bottom: 1px solid;*/
+				padding-top: 40px;
+				padding-bottom: 40px;
+				margin-top: 60px;
+				/*margin-bottom: 60px;*/
+			}
+
+			p {
+				color: gray;
+				font-size: 18px;
+				font-weight: 200;
+			}
+
+			iron-image {
+				width:500px;
+				height:500px;
+				background-color: black;
+			}
+		</style>
+		<!--<iron-image sizing="cover" preload fade src="{{data.portrait_huge}}"></iron-image>-->
+		<iron-image sizing="cover" preload fade src="https://i.vimeocdn.com/portrait/794809_1000.jpg"></iron-image>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis esse, eum dolor vitae laborum non libero, accusantium nam nostrum possimus, incidunt sit sint rerum ullam? Eligendi nam quisquam quia quos quasi reiciendis, incidunt. Praesentium soluta vel alias! Accusamus libero voluptatibus, quas quod quam ullam saepe, minima ad adipisci quis et aperiam iure fugiat neque corporis debitis aliquam, aspernatur laborum velit.</p>
+		<p>{{data.bio}}</p>
+		<p>Excepturi ducimus id nobis suscipit cumque, vel rerum enim natus aut minima, voluptates itaque, aliquam adipisci, modi voluptate rem quibusdam! Ducimus, cum. Libero tempora repellendus, recusandae est consequatur vel sit quis repellat provident necessitatibus natus eum eius, earum numquam sed aliquam voluptas ut reprehenderit cum et, unde velit quidem omnis? Dolor, assumenda ipsum eaque, tempora nostrum hic iusto nisi expedita! Vero laudantium quas nam commodi deserunt nulla labore dicta voluptates fugit sint fuga accusantium eius ipsa, enim est cumque veritatis pariatur architecto nisi? Fuga mollitia a enim beatae cum placeat modi eum distinctio corporis odit architecto, officia id! Praesentium sed obcaecati reprehenderit quibusdam cum, iste corporis, adipisci ex, accusantium similique numquam? Distinctio enim provident quae beatae dolor adipisci numquam possimus.</p>
+	</template>
+
+	<script>
+		Polymer({
+			is: 'widget-about',
+
+		});
+	</script>
+
+</dom-module>

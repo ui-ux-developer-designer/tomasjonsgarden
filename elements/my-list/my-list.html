@@ -1,0 +1,107 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="my-list">
+	<template>
+		<style>
+			:host {
+				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
+
+				box-sizing: border-box;
+				padding: 2px;
+				justify-content: center;
+			}
+
+			:host div {
+				flex-basis: 505px;
+				color: grey;
+				background-color: black;
+				box-sizing: border-box;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				margin: 2px;
+			}
+
+			span:not(:first-child):not(:empty):before {
+				content: '|';
+				margin-right: 10px;
+				margin-left: 10px;
+			}
+
+			span {
+				font-weight: 100;
+			}
+
+			span:first-child {
+				color: white;
+				font-style: italic;
+				font-weight: 500;
+			}
+
+			iron-image {
+				width:500px; height:180px; background-color: black;
+			}
+
+		</style>
+		<iron-ajax url="https://vimeo.com/api/v2/4487625/videos.json" last-response="{{data}}" auto></iron-ajax>
+
+		<template is="dom-repeat" items="{{data}}">
+			<div>
+				<p>
+					<span>{{item.title}}</span>
+					<template is="dom-repeat" items="{{computeTags(item.tags)}}">
+						<span>{{item}}</span>
+					</template>
+					<span>{{computeDate(item.upload_date)}}</span>
+				</p>
+				<iron-image sizing="cover" preload fade src="{{computeImages(item.thumbnail_large)}}"></iron-image>
+			</div>
+		</template>
+	</template>
+	<script>
+		(function () {
+      'use strict';
+
+      Polymer({
+        is: 'my-list',
+        properties: {
+          items: {
+            type: Array,
+            notify: true,
+          }
+        },
+		_filter: function(val) {
+				return function() {
+					// filter="{{_filter(data)}}"
+					return console.log(val);
+				};
+			},
+		computeImages: function(image) {
+        	return image.replace('_640','_900');
+      	},
+		computeTags: function(tags) {
+        	return tags.split(', ').splice(2, 2);
+      	},
+		computeDate: function(date) {
+			var d = new Date(date);
+        	return d.getFullYear();
+      	},
+        ready: function() {
+          this.items = [];
+        }
+      });
+    })();
+	</script>
+
+</dom-module>

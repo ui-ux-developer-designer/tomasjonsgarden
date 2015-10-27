@@ -1,0 +1,183 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="widget-slideshow">
+
+	<template>
+		<style>
+			:host {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				border-bottom: 1px solid;
+				padding-bottom: 5px;
+				max-width: 1024px;
+				margin: auto;
+			}
+
+			menu {
+				display: flex;
+				flex-direction: row;
+				padding: 0;
+			}
+
+			button {
+				border: 0;
+				outline: 0;
+				padding: 0;
+				width: 10px;
+				height: 10px;
+				margin: 5px;
+				border-radius: 50%;
+				background-color: dimgray;
+			}
+
+			header {
+				border-top: 1px solid;
+				border-bottom: 1px solid;
+				padding-top: 13px;
+				padding-bottom: 20px;
+				margin-top: 20px;
+				margin-bottom: 20px;
+			}
+
+			div span {
+				color: gray;
+				font-weight: 100;
+				font-size: 14px;
+			}
+
+			div span:not(:first-child):not(:empty):before {
+				content: '|';
+				margin-right: 10px;
+				margin-left: 10px;
+			}
+
+			div b {
+				color: lightgray;
+				font-weight: 400;
+				text-transform: uppercase;
+				font-size: 18px;
+			}
+
+			i {
+				background-color: red;
+				font-weight: 600;
+				color: white;
+				padding: 0 10px 0 10px;
+				font-size: 14px;
+				margin-right: 20px;
+				position: relative;
+			}
+
+			i:after {
+				content: '';
+				position: absolute;
+				left: 100%;
+				top: 0;
+				width: 0;
+				height: 0;
+				border-top: 10px solid transparent;
+				border-bottom: 9px solid transparent;
+
+				border-left: 10px solid red;
+			}
+
+			button:hover {
+				background-color: gray;
+			}
+
+			button.active {
+				background-color: white;
+			}
+
+			iron-image {
+				width: 1010px;
+				height: 460px;
+				background-color: black;
+			}
+		</style>
+		<iron-ajax url="https://vimeo.com/api/v2/4487625/videos.json" last-response="{{data}}" auto></iron-ajax>
+
+
+		<template is="dom-repeat" items="{{item}}">
+			<div>
+				<header>
+					<i>NEW</i>
+					<b>{{item.title}}</b>
+					<template is="dom-repeat" items="{{computeTags(item.tags)}}">
+						<span>{{item}}</span>
+					</template>
+					<span>{{computeDate(item.upload_date)}}</span>
+				</header>
+				<iron-image sizing="cover" preload fade src="{{computeImages(item.thumbnail_large)}}"></iron-image>
+			</div>
+		</template>
+
+		<menu>
+			<template is="dom-repeat" items="{{computeCollection(data)}}">
+				<button on-click="select"></button>
+			</template>
+		</menu>
+	</template>
+
+	<script>
+		Polymer({
+			is: 'widget-slideshow',
+			properties: {
+				items: {
+					type: Array,
+					notify: true,
+					value: [],
+					observer: 'ready'
+				},
+				item: {
+					type: Object,
+					notify: true,
+					value: [{
+						title: 'title',
+						tags: '',
+						uploadDate: '',
+						thumbnailLarge: ''
+					}]
+				}
+			},
+			computeImages: function(image) {
+        		return image.replace('_640','_2500');
+			},
+			computeTags: function(tags) {
+				return tags.split(', ').splice(0, 6);
+			},
+			computeCollection: function(collection) {
+				this.items = collection.splice(5, 3);
+				return this.items;
+			},
+			selectCollection: function(collection) {
+				return collection.splice(1, 1);
+			},
+			computeDate: function(date) {
+				var d = new Date(date);
+				return d.getFullYear();
+			},
+			ready: function() {
+				console.log('ready');
+				this.item = [this.items[0]];
+			},
+			select: function(e) {
+				var model = e.model;
+				// e.target.classList.add('completed');
+				$(e.target).addClass('active').siblings().removeClass('active');
+				this.item = [model.item];
+			}
+		});
+	</script>
+
+</dom-module>
